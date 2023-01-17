@@ -24,16 +24,22 @@
                     class="form-control">
             </div>
             <div class="mb-3">
-                <label class="h4" for="type_id" class="form-label">types</label>
-                <select class="form-select form-select-lg @error('type_id') 'is-invalid' @enderror" name="type_id"
-                    id="type_id">
-                    <option selected>Select one</option>
-
-                    @foreach ($types as $type)
-                        <option value="{{ $type->id }}"
-                            {{ $type->id == old('type_id', $project->type ? $project->type->id : '') ? 'selected' : '' }}>
-                            {{ $type->name }}</option>
-                    @endforeach
+                <label class="h4" for="type_id" class="form-label">Types</label>
+                <select multiple class="form-select form-select-sm" name="technologies[]" id="technologies">
+                    <option value="" disabled>Select a tech</option>
+                    @forelse ($technologies as $tech)
+                        @if ($errors->any())
+                            <option value="{{ $tech->id }}"
+                                {{ in_array($tech->id, old('technologies', [])) ? 'selected' : '' }}>{{ $tech->name }}
+                            </option>
+                        @else
+                            <option value="{{ $tech->id }}"
+                                {{ $project->technologies->contains($tech->id) ? 'selected' : '' }}>{{ $tech->name }}
+                            </option>
+                        @endif
+                    @empty
+                        <option value="" disabled>Sorry 😥 no technologies in the system</option>
+                    @endforelse
 
                 </select>
             </div>
@@ -47,7 +53,23 @@
                     <small id="ImageHelper" class="text-muted">Replace the project image</small>
                 </div>
             </div>
-
+            <div class="mb-3">
+                <label for="technologies" class="form-label">technologies</label>
+                <select multiple class="form-select form-select-sm" name="technologies[]" id="technologies">
+                    <option value="" disabled>Select a technology</option>
+                    @forelse ($technologies as $tech)
+                        @if ($errors->any())
+                            <option value="{{ $tech->id }}"
+                                {{ in_array($tech->id, old('technologies', [])) ? 'selected' : '' }}>
+                                {{ $tech->name }}</option>
+                        @else
+                            <option value="{{ $tech->id }}">{{ $tech->name }}</option>
+                        @endif
+                    @empty
+                        <option value="" disabled>Sorry 😥 no technologies in the system</option>
+                    @endforelse
+                </select>
+            </div>
             <div class=" wrapper py-3">
                 <label class="h4" for="description">Description</label>
                 <textarea type="text" name="description" id="description"
