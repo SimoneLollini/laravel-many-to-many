@@ -26,9 +26,28 @@
                 <small id=" titleHlper" class="text-muted">Add Project title here</small>
             </div>
 
+
+            <div class="mb-3">
+                <label for="technologies" class="form-label">technologies</label>
+                <select multiple class="form-select form-select-sm" name="technologies[]" id="technologies">
+                    <option value="" disabled>Select a technology</option>
+                    @forelse ($technologies as $tech)
+                        @if ($errors->any())
+                            <option value="{{ $tech->id }}"
+                                {{ in_array($tech->id, old('technologies', [])) ? 'selected' : '' }}>
+                                {{ $tech->name }}</option>
+                        @else
+                            <option value="{{ $tech->id }}">{{ $tech->name }}</option>
+                        @endif
+                    @empty
+                        <option value="" disabled>Sorry 😥 no technologies in the system</option>
+                    @endforelse
+                </select>
+            </div>
+
             <div class="mb-3">
                 <label for="type_id" class="form-label">Type</label>
-                <select class="form-select form-select-lg @error('type_id') 'is-invalid' @enderror" name="type_id"
+                <select class="form-select form-select-md @error('type_id') 'is-invalid' @enderror" name="type_id"
                     id="type_id">
                     <option value="" selected>Select one</option>
 
@@ -38,6 +57,7 @@
 
                 </select>
             </div>
+
 
             <div class="mb-3">
                 <label for="image" class="form-label">Image</label>

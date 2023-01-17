@@ -1,12 +1,15 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\admin;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
 use App\Models\Project;
+use App\Models\Technology;
 use App\Models\Type;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 class ProjectController extends Controller
 {
@@ -29,7 +32,8 @@ class ProjectController extends Controller
     public function create()
     {
         $types = Type::all();
-        return view('admin.project.create', compact('types'));
+        $technologies = Technology::all();
+        return view('admin.project.create', compact('types', 'technologies'));
     }
 
     /**
@@ -48,6 +52,12 @@ class ProjectController extends Controller
         $project_slug = Project::generateSlug($val_data['title']);
         $val_data['slug'] = $project_slug;
         $newProject = Project::create($val_data);
+
+
+        if ($request->has('technologies')) {
+            $newProject->technologies()->attach($val_data['technologies']);
+        }
+
         return to_route('project.index')->with('message', "$newProject->title added!");
     }
 
