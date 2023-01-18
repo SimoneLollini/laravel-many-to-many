@@ -5,7 +5,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\admin\ProjectController;
 use Illuminate\Support\Facades\Route;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
-
+use App\Http\Controllers\admin\TypeController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -28,6 +28,9 @@ Route::get('/admin', function () {
 Route::middleware('auth')->group(function () {
     Route::resource('admin/project', ProjectController::class)->parameters([
         'project' => 'project:slug'
+    ]);
+    Route::resource('admin/type', TypeController::class)->parameters([
+        'type' => 'type:slug'
     ]);
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
