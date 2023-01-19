@@ -40,7 +40,7 @@ class TypeController extends Controller
     public function store(StoreTypeRequest $request)
     {
         $val_data = $request->validated();
-        $type_slug = Project::generateSlug($val_data['name']);
+        $type_slug = Project::generateSlug($val_data['name  ']);
         $val_data['slug'] = $type_slug;
         $newType = Type::create($val_data);
         return to_route('type.index')->with('message', "$newType->name added!");
